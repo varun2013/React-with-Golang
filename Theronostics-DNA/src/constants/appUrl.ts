@@ -1,0 +1,16 @@
+export const LOGIN_APP_URL = "/login";
+export const FORGET_PASSWORD_APP_URL = "/forgot-password";
+export const MANAGE_PROFILE_APP_URL = "/profile";
+export const MANAGE_STAFF_APP_URL = "/manage-staff";
+export const MANAGE_CUSTOMER_APP_URL = "/manage-customer";
+export const CUSTOMER_DETAILS_APP_URL = "/customer-detail/:customerID";
+export const MANAGE_ORDER_APP_URL = "/manage-order";
+export const MANAGE_INVENTORY_APP_URL = "/manage-inventory";
+export const MAIN_SECTION_APP_URL = "/";
+export const SINGLE_PRODUCT_APP_URL = "/product";
+export const PRODUCT_DETAILS_APP_URL = "/product-details";
+export const PAYMENT_STATUS_APP_URL = "/payment-status";
+export const NOTIFICATION_APP_URL = "/notification";
+export const KIT_REGISTER_APP_URL = "/kit-register";
+export const MANAGE_POST_BACK_ORDERS_APP_URL = "/manage-post-back-orders";
+export const HELP_APP_URL = "/help"
