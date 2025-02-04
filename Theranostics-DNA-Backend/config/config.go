@@ -4,7 +4,6 @@ package config
 import (
 	"fmt"
 	"log"
-	"strings"
 
 	"gorm.io/driver/postgres"
 	"gorm.io/gorm"
@@ -62,68 +61,4 @@ func InitDB() {
 	}
 
 	log.Printf("%s environment: %s", "Database connection established", cfg.Environment)
-}
-
-// CreateEnumTypes creates the necessary enum types in the database if they don't exist.
-// The method takes a list of enum types and their corresponding values. It checks if
-// the type exists using a transaction and if not, creates the type using a CREATE TYPE
-// query. If the type already exists, it logs a message and skips the creation.
-func CreateEnumTypes() error {
-	enumTypes := map[string]string{
-		"dna_payment_status":           "dna_payment_status",
-		"dna_order_status":             "dna_order_status",
-		"dna_notification_type":        "dna_notification_type",
-		"dna_notification_entity_type": "dna_notification_entity_type",
-		"dna_kit_status":               "dna_kit_status",
-	}
-
-	enumValues := map[string][]string{
-		"dna_payment_status":           {"Pending", "Completed", "Failed"},
-		"dna_order_status":             {"Pending", "Processing", "Dispatched", "Shipped", "Delivered", "Cancelled"},
-		"dna_notification_type":        {"Admin Management", "Inventory Management", "Order Purchase", "Order Management"},
-		"dna_notification_entity_type": {"barcodes", "customers", "invoices", "kits", "orders", "payments", "roles", "users"},
-		"dna_kit_status":               {"Not-Received", "Received", "Reject", "Send"},
-	}
-
-	// Iterate over the enum types and create them if they don't exist
-	for dbType, enumName := range enumTypes {
-		// Check if type exists using a transaction to handle potential errors
-		tx := DB.Begin()
-		var exists bool
-		checkQuery := `
-			SELECT EXISTS (
-				SELECT 1 FROM pg_type 
-				WHERE typname = $1
-			);
-		`
-		if err := tx.Raw(checkQuery, dbType).Scan(&exists).Error; err != nil {
-			tx.Rollback()
-			log.Printf("Error checking enum %s: %v", dbType, err)
-			continue // Skip this enum and continue with others
-		}
-
-		if !exists {
-			// Construct the CREATE TYPE query with values
-			values := strings.Join(enumValues[enumName], "', '")
-			createQuery := fmt.Sprintf("CREATE TYPE %s AS ENUM ('%s')", dbType, values)
-
-			if err := tx.Exec(createQuery).Error; err != nil {
-				tx.Rollback()
-				// Check if the error is because the type already exists (race condition)
-				if strings.Contains(err.Error(), "already exists") {
-					log.Printf("Enum type %s already exists (created by another process)", dbType)
-					continue
-				}
-				log.Printf("Error creating enum %s: %v", dbType, err)
-				continue // Skip this enum and continue with others
-			}
-			log.Printf("Successfully created enum type: %s", dbType)
-		} else {
-			log.Printf("Enum type %s already exists, skipping", dbType)
-		}
-
-		tx.Commit()
-	}
-
-	return nil
 }

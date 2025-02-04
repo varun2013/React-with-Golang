@@ -4,20 +4,6 @@ package utils
 const (
 	// Route Names
 
-	// Public
-	RouteWelcome               = "/"
-	RouteLogin                 = "/login"
-	RouteForgetPassword        = "/user/forgot-password"
-	RouteEncryptProductDetails = "/encrypt-product"
-	RouteVerifyProductDetails  = "/verify-product"
-	RouteProductPaymentDetails = "/order-payment"
-	RoutePaymentSuccessPaypal  = "/payment/status"
-	RouteKitRegistration       = "/kit-registration"
-	RouteFetchQuantityDiscount = "/quantity-discounts"
-	RouteVerifyBarcode         = "/verify-barcode"
-	RouteKitRegister           = "/kit-register"
-	RouteEncryptData           = "/encrypt"
-
 	// Private
 	RouteLogout                     = "/logout"
 	RouteResetPassword              = "/user/reset-password"

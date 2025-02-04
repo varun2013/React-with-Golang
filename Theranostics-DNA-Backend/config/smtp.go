@@ -12,10 +12,10 @@ import (
 func SendEmail(recipients []string, subject, body string) error {
 	log.Printf("Sending email to: %v", recipients)
 	m := gomail.NewMessage()
-	// Set the "From" field with the desired format: "Theransotics.com"
+	// Set the "From" field with the desired format: "example.com"
 	// The email address is the same as the SmtpEmail address.
 	fromEmail := AppConfig.SmtpFromEmail
-	fromName := "Theransotics.com"
+	fromName := "example.com"
 	m.SetHeader("From", fromName+" <"+fromEmail+">")
 	m.SetHeader("To", recipients...)
 	m.SetHeader("Subject", subject)
